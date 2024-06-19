@@ -9,15 +9,23 @@ export default function App() {
   const [location, setLocation] = useState();
   const [ok, setOk] = useState(true);
   const ask = async() => {
-    const {granted} = await Location.requestForegroundPermissionsAsync();
+    const {granted} = await Location.requestBackgroundPermissionsAsync();
     if (!granted){
       setOk(false);
     }
     const {coords: {latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy: 5});
-    const location = await Location.reverseGeocodeAsync(
-      {latitude, longitude}, 
-      {useGoogleMaps: false}
-    )
+    console.log({latitude, longitude})
+
+    async function geocoding () {
+      const location = await Location.reverseGeocodeAsync(
+        {latitude, longitude},
+        { useGoogleMaps: false }
+      );
+      console.log(location[0].city);
+      setCity(location[0].city);
+    }
+
+    setTimeout( geocoding, 2000);
   };
   useEffect(() => {
     ask(); 
@@ -84,4 +92,3 @@ const styles = StyleSheet.create({
     fontSize: 60,
   },
 });
-
