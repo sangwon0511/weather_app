@@ -14,18 +14,11 @@ export default function App() {
       setOk(false);
     }
     const {coords: {latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy: 5});
-    console.log({latitude, longitude})
-
-    async function geocoding () {
-      const location = await Location.reverseGeocodeAsync(
-        {latitude, longitude},
-        { useGoogleMaps: false }
-      );
-      console.log(location[0].city);
-      setCity(location[0].city);
-    }
-
-    setTimeout( geocoding, 2000);
+    const location = await Location.reverseGeocodeAsync(
+      {latitude, longitude},
+      { useGoogleMaps: false }
+    );
+    setCity(location[0].city);
   };
   useEffect(() => {
     ask(); 
